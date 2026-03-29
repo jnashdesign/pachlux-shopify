@@ -1,0 +1,30 @@
+{%- comment -%}
+  Top-of-page anchor for deep links and CSS (#page-home, #page-contact, …).
+  Keeps id="main" unchanged for skip links and theme scripts.
+{%- endcomment -%}
+{% liquid
+  assign page_id = 'page-'
+
+  if template.name == 'index'
+    assign page_id = page_id | append: 'home'
+  elsif template.name == 'password'
+    assign page_id = page_id | append: 'password'
+  elsif template.suffix != blank
+    assign page_id = page_id | append: template.suffix
+  elsif template.name == 'page' and page
+    assign page_id = page_id | append: page.handle
+  elsif template.name == 'blog' and blog
+    assign page_id = page_id | append: blog.handle
+  elsif template.name == 'article' and article
+    assign page_id = page_id | append: article.handle
+  elsif template.name == 'collection' and collection
+    assign page_id = page_id | append: collection.handle
+  elsif template.name == 'product' and product
+    assign page_id = page_id | append: product.handle
+  elsif template.name == 'list-collections'
+    assign page_id = page_id | append: 'list-collections'
+  else
+    assign page_id = page_id | append: template.name
+  endif
+%}
+<div id="{{ page_id }}" class="page-top" tabindex="-1"></div>
