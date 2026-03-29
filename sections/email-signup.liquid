@@ -1,0 +1,145 @@
+<section class="signup-section">
+  <div class="signup-box">
+
+    <!-- LEFT TEXT -->
+    <div class="left">
+      <h2>{{ section.settings.heading }}</h2>
+    </div>
+
+    <!-- RIGHT CONTENT -->
+    <div class="right">
+      <p>{{ section.settings.subtext }}</p>
+
+      {% form 'customer', class: 'signup-form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+
+        <input 
+          type="email" 
+          name="contact[email]" 
+          placeholder="{{ section.settings.placeholder }}" 
+          required
+        >
+
+        <button type="submit">
+          {{ section.settings.button_text }}
+        </button>
+      {% endform %}
+
+    </div>
+
+  </div>
+</section>
+
+<style>
+.signup-section {
+  padding: 80px 40px;
+  background: #f5f5f5;
+}
+
+/* BOX */
+.signup-box {
+  background: #0b0b3c;
+  border-radius: 12px;
+  padding: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: bottom;
+  color: #fff;
+}
+
+/* LEFT */
+.left h2 {
+  font-size: 32px;
+  margin: 0;
+}
+
+/* RIGHT */
+.right {
+  max-width: 400px;
+}
+
+.right p {
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+/* FORM */
+.signup-form {
+  display: flex;
+  background: #e8b4b4;
+  border-radius: 30px;
+  padding: 5px;
+  overflow: hidden;
+}
+
+/* INPUT */
+.signup-form input {
+  border: none;
+  outline: none;
+  padding: 10px 15px;
+  flex: 1;
+  background: transparent;
+  color: #000;
+}
+
+/* BUTTON */
+.signup-form button {
+  background: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .signup-box {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .right {
+    width: 100%;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Email Signup",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Get Exclusive Offers"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Sub Text",
+      "default": "Sign up to get early access to discounts and news"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Input Placeholder",
+      "default": "write your email"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Join Now"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Email Signup"
+    }
+  ]
+}
+{% endschema %}

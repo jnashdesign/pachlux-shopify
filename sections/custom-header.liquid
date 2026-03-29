@@ -1,0 +1,179 @@
+<header class="custom-header">
+  <div class="container">
+
+    <!-- LEFT: Logo + Menu -->
+    <div class="left-side">
+      
+      <div class="logo-area">
+        {% if section.settings.logo != blank %}
+          <img src="{{ section.settings.logo | image_url }}" alt="logo">
+        {% else %}
+          <h2>{{ shop.name }}</h2>
+        {% endif %}
+      </div>
+
+      <nav class="menu">
+        {% for link in linklists[section.settings.menu].links %}
+          <a href="{{ link.url }}">{{ link.title }}</a>
+        {% endfor %}
+      </nav>
+
+    </div>
+
+    <!-- RIGHT: Buttons -->
+    <div class="right-side">
+
+      {% if customer %}
+        <a href="{{ routes.account_url }}" class="btn login-btn">
+          Account
+        </a>
+
+        <a href="{{ routes.account_logout_url }}" class="btn signup-btn">
+          Logout
+        </a>
+      {% else %}
+        <a href="{{ routes.account_login_url }}" class="btn login-btn">
+          {{ section.settings.login_text }}
+        </a>
+
+        <a href="{{ routes.account_register_url }}" class="btn signup-btn">
+          {{ section.settings.signup_text }}
+        </a>
+      {% endif %}
+
+    </div>
+
+  </div>
+</header>
+
+<style>
+.custom-header {
+  padding: 20px 40px;
+  background: #f7f7f7;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LEFT */
+.left-side {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.logo-area img {
+  max-height: 80px;
+}
+
+/* MENU */
+.menu {
+  display: flex;
+  gap: 20px;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #050038;
+  font-weight: 500;
+}
+
+/* RIGHT */
+.right-side {
+  display: flex;
+  gap: 10px;
+}
+
+/* BUTTONS */
+.btn {
+  padding: 10px 18px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 500;
+  color: #050038;
+  display: inline-block;
+}
+
+/* Login Button */
+.login-btn {
+  background: {{ section.settings.login_color }};
+}
+
+/* Signup Button */
+.signup-btn {
+  background: {{ section.settings.signup_color }};
+}
+
+/* Hover */
+.btn:hover {
+  opacity: 0.9;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .left-side {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .menu {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Custom Header Final",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu"
+    },
+    {
+      "type": "text",
+      "id": "login_text",
+      "label": "Login Text",
+      "default": "Login"
+    },
+    {
+      "type": "color",
+      "id": "login_color",
+      "label": "Login Button Color",
+      "default": "#000000"
+    },
+    {
+      "type": "text",
+      "id": "signup_text",
+      "label": "Signup Text",
+      "default": "Sign up free"
+    },
+    {
+      "type": "color",
+      "id": "signup_color",
+      "label": "Signup Button Color",
+      "default": "#e8b4d3"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Header Final"
+    }
+  ]
+}
+{% endschema %}

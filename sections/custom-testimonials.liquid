@@ -1,0 +1,253 @@
+<section class="testimonial-section">
+  <div class="container">
+
+    <!-- LEFT -->
+    <div class="left-content">
+      <p class="subtitle">TESTIMONIALS</p>
+      <h2>{{ section.settings.heading }}</h2>
+
+      <div class="dots">
+        {% for block in section.blocks %}
+          <span class="dot" data-index="{{ forloop.index0 }}"></span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right-content">
+      {% for block in section.blocks %}
+        <div class="card" data-index="{{ forloop.index0 }}">
+          
+          {% if block.settings.image %}
+            <img src="{{ block.settings.image | image_url }}" class="avatar">
+          {% endif %}
+
+          <p class="text">“{{ block.settings.text }}”</p>
+          <h4>{{ block.settings.name }}</h4>
+          <span class="location">{{ block.settings.location }}</span>
+
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+<style>
+.testimonial-section {
+  padding: 80px 40px;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LEFT */
+.left-content {
+  max-width: 40%;
+}
+
+.subtitle {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #777;
+}
+
+.left-content h2 {
+  font-size: 40px;
+  color: #1a1a3c;
+}
+
+/* DOTS */
+.dots {
+  margin-top: 20px;
+}
+
+.dot {
+  height: 8px;
+  width: 8px;
+  background: #ccc;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.dot.active {
+  background: #1a1a3c;
+  transform: scale(1.2);
+}
+
+/* RIGHT */
+.right-content {
+  position: relative;
+  width: 50%;
+  height: 220px;
+}
+
+/* CARD BASE */
+.card {
+  position: absolute;
+  width: 100%;
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: all 0.5s ease;
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+/* ACTIVE */
+.card.active {
+  opacity: 1;
+  transform: scale(1);
+  z-index: 3;
+}
+
+/* NEXT */
+.card.next {
+  opacity: 0.7;
+  transform: translate(15px,15px) scale(0.95);
+  z-index: 2;
+}
+
+/* NEXT 2 */
+.card.next2 {
+  opacity: 0.5;
+  transform: translate(30px,30px) scale(0.9);
+  z-index: 1;
+}
+
+/* Avatar */
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  position: absolute;
+  top: -20px;
+  left: 20px;
+}
+
+/* TEXT */
+.text {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.card h4 {
+  margin-top: 15px;
+}
+
+.location {
+  font-size: 12px;
+  color: #777;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .left-content, .right-content {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .right-content {
+    height: auto;
+  }
+
+  .card {
+    position: relative;
+    margin-bottom: 20px;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const cards = document.querySelectorAll(".card");
+  const dots = document.querySelectorAll(".dot");
+  let index = 0;
+
+  function updateCards(i) {
+    cards.forEach(card => {
+      card.classList.remove("active", "next", "next2");
+    });
+
+    dots.forEach(dot => dot.classList.remove("active"));
+
+    cards[i].classList.add("active");
+    dots[i].classList.add("active");
+
+    if (cards[i + 1]) cards[i + 1].classList.add("next");
+    if (cards[i + 2]) cards[i + 2].classList.add("next2");
+  }
+
+  // Auto Slide
+  function autoSlide() {
+    index = (index + 1) % cards.length;
+    updateCards(index);
+  }
+
+  let interval = setInterval(autoSlide, 3000);
+
+  // Dot Click
+  dots.forEach(dot => {
+    dot.addEventListener("click", function () {
+      index = parseInt(this.getAttribute("data-index"));
+      updateCards(index);
+      clearInterval(interval);
+      interval = setInterval(autoSlide, 3000);
+    });
+  });
+
+  // Init
+  updateCards(index);
+});
+</script>
+
+{% schema %}
+{
+  "name": "Testimonials PRO",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "What People Say About Us.",
+      "label": "Heading"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "User Image" },
+        { "type": "textarea", "id": "text", "label": "Text" },
+        { "type": "text", "id": "name", "label": "Name" },
+        { "type": "text", "id": "location", "label": "Location" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials PRO",
+      "blocks": [
+        { "type": "testimonial" },
+        { "type": "testimonial" },
+        { "type": "testimonial" }
+      ]
+    }
+  ]
+}
+{% endschema %}

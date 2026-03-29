@@ -1,0 +1,246 @@
+<section class="product-section">
+  <div class="container">
+
+    <!-- LEFT: IMAGE SLIDER -->
+    <div class="product-images">
+      <div class="main-image-wrapper">
+        <img id="main-image" src="{{ product.featured_image | image_url }}" alt="product">
+      </div>
+
+      <div class="thumbnails">
+        {% for image in product.images %}
+          <img src="{{ image | image_url }}" onclick="changeImage(this)">
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="product-info" id="product-info">
+
+      <h1>{{ product.title }}</h1>
+      <p class="price">{{ product.price | money }}</p>
+
+      <p>{{ product.description }}</p>
+
+      <!-- VARIANTS -->
+      {% unless product.has_only_default_variant %}
+        <select id="variant-select">
+          {% for variant in product.variants %}
+            <option value="{{ variant.id }}">
+              {{ variant.title }} - {{ variant.price | money }}
+            </option>
+          {% endfor %}
+        </select>
+      {% endunless %}
+
+      <!-- QUANTITY -->
+      <div class="qty-box">
+        <button onclick="changeQty(-1)">-</button>
+        <input type="number" id="qty" value="1" min="1">
+        <button onclick="changeQty(1)">+</button>
+      </div>
+
+    
+
+      <!-- ADD TO CART -->
+      <form method="post" action="/cart/add">
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="variant-id">
+        <input type="hidden" name="quantity" id="qty-input" value="1">
+
+        <button class="add-to-cart">Add to Cart</button>
+      </form>
+
+      <button class="buy-now" onclick="buyNow()">Buy Now</button>
+
+      <!-- ACCORDION -->
+      <div class="accordion">
+
+        
+
+        <div class="acc-item">
+          <div class="acc-title" onclick="toggleAcc(this)">Benefits</div>
+          <div class="acc-content">
+            <p>Free shipping in 3-5 days 🚚</p>
+          </div>
+        </div>
+
+        <div class="acc-item">
+          <div class="acc-title" onclick="toggleAcc(this)">Ingredients</div>
+          <div class="acc-content">
+            <p>Free shipping in 3-5 days 🚚</p>
+          </div>
+        </div>
+
+        <div class="acc-item">
+          <div class="acc-title" onclick="toggleAcc(this)">How to Use</div>
+          <div class="acc-content">
+            <p>Free shipping in 3-5 days 🚚</p>
+          </div>
+        </div>
+
+        <div class="acc-item">
+          <div class="acc-title" onclick="toggleAcc(this)">Scent Notes</div>
+          <div class="acc-content">
+            <p>Free shipping in 3-5 days 🚚</p>
+          </div>
+        </div>
+
+        <div class="acc-item">
+          <div class="acc-title" onclick="toggleAcc(this)">Reviews</div>
+          <div class="acc-content">
+            <div class="reviews">
+              <p><spn>Test User</spn> <br> Amazing product! <br> ⭐⭐⭐⭐⭐ </p>
+              <br>
+              <p><spn>Test User</spn> <br> Amazing product! <br> ⭐⭐⭐⭐⭐ </p>
+              <br>
+              <p><spn>Test User</spn> <br> Amazing product! <br> ⭐⭐⭐⭐⭐ </p>
+              
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- STICKY BAR -->
+  <div class="sticky-bar" id="sticky-bar">
+    <span>{{ product.title }}</span>
+    <button onclick="scrollToTop()">Add to Cart</button>
+  </div>
+</section>
+
+<style>
+.product-section { padding: 60px 40px; }
+.container { display: flex; gap: 50px; }
+
+/* IMAGES */
+.product-images { width: 50%; }
+.main-image-wrapper { overflow: hidden; border-radius: 10px; }
+.main-image-wrapper img {
+  width: 100%;
+  transition: transform 0.3s;
+}
+.main-image-wrapper:hover img {
+  transform: scale(1.2);
+}
+
+.thumbnails {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.thumbnails img {
+  width: 60px;
+  cursor: pointer;
+}
+
+/* INFO */
+.product-info { width: 50%; }
+
+.price { font-size: 22px; margin: 10px 0; }
+
+/* QTY */
+.qty-box { display: flex; gap: 10px; margin: 15px 0; }
+
+/* BUTTONS */
+.add-to-cart {
+  width: 100%;
+  padding: 12px;
+  background: #000;
+  color: #fff;
+  border: none;
+  margin-bottom: 10px;
+}
+.buy-now {
+  width: 100%;
+  padding: 12px;
+  background: #e8b4d3;
+  border: none;
+}
+
+/* ACCORDION */
+.accordion { margin-top: 20px; }
+.acc-item { border-bottom: 1px solid #ddd; }
+.acc-title {
+  padding: 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.acc-content {
+  display: none;
+  padding: 10px;
+}
+
+/* STICKY */
+.sticky-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #000;
+  color: #fff;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  display: none;
+}
+.sticky-bar button {
+  background: #e8b4d3;
+  border: none;
+  padding: 10px 15px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .container { flex-direction: column; }
+  .product-images, .product-info { width: 100%; }
+}
+</style>
+
+<script>
+function changeImage(el){
+  document.getElementById("main-image").src = el.src;
+}
+
+function changeQty(val){
+  let qty = document.getElementById("qty");
+  let newVal = parseInt(qty.value) + val;
+  if(newVal >= 1){
+    qty.value = newVal;
+    document.getElementById("qty-input").value = newVal;
+  }
+}
+
+document.getElementById("variant-select")?.addEventListener("change", function(){
+  document.getElementById("variant-id").value = this.value;
+});
+
+function buyNow(){
+  let id = document.getElementById("variant-id").value;
+  let qty = document.getElementById("qty").value;
+  window.location.href = `/cart/${id}:${qty}`;
+}
+
+/* ACCORDION */
+function toggleAcc(el){
+  let content = el.nextElementSibling;
+  content.style.display = content.style.display === "block" ? "none" : "block";
+}
+
+/* STICKY */
+window.addEventListener("scroll", function(){
+  let bar = document.getElementById("sticky-bar");
+  if(window.scrollY > 300){
+    bar.style.display = "flex";
+  } else {
+    bar.style.display = "none";
+  }
+});
+
+function scrollToTop(){
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+</script>
