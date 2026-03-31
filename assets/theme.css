@@ -8164,14 +8164,6 @@ ul {
   border-radius: 50px;
   font-weight: bold;
 }
-#page-home > section:first-child {
-  background-image: url(https://cdn.shopify.com/s/files/1/0812/0690/3002/files/irresistibleCurvesHeader_wide.png?v=1774682344);
-  background-position: bottom right;
-  background-repeat: no-repeat;
-  background-size: cover;
-  min-height: 500px;
-  padding: 100px 0;
-}
 #page-home > section:first-child .prose h2,
 #page-home > section:first-child .prose p {
   color: #a23324;
@@ -8193,7 +8185,53 @@ ul {
 max-width: 450px;
 margin: 0 auto;
 }
-
+.qty-box button {
+  padding: 10px !important;
+  font-size: 1.25em;
+}
+.qty-box input {
+  padding: 0 10px;
+  max-width: 6em;
+}
+.product-info button {
+  border-radius: 7px;
+}
+.prose.text-center p.h2 strong {
+  font-size: 1.25em;
+  font-weight: bold;
+}
+.footer__block.footer__block--newsletter button {
+color: #222 !important;
+}
+.footer__block.footer__block--newsletter button:hover {
+color: #fff !important;
+}
+.container--xs {
+--container-max-width: none !important;
+}
+#page-contact .container .section-header, #page-contact .section-stack {
+  max-width: none !important;
+  display: block;
+  width: 100%;
+  margin-bottom: 40px;
+}
+#page-contact .section-stack {
+  text-align: left;
+}
+#page-contact .section-header .h2:after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 300px;
+  margin-top: 20px;
+  background-color: #000000;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url('https://cdn.shopify.com/s/files/1/0812/0690/3002/files/contactHeader.jpg?v=1774942907');
+}
+.sticky-bar {
+  display:none !important;
+}
 @media screen and (max-width: 1200px) {
   #main {
     max-width: 1000px;
@@ -8213,11 +8251,19 @@ margin: 0 auto;
   }
 }
 @media screen and (max-width: 768px) {
-  #page-home > section:first-child {
-    background-image: url(https://cdn.shopify.com/s/files/1/0812/0690/3002/files/irresistibleCurvesHeader_mobile.png?v=1774684277);
-    background-position: bottom right;
-    min-height: 600px;
-    padding-bottom: 65%;
+  #page-about table img {
+    height: 100px !important;
+    width: auto !important;
+  }
+  #page-about table tr td {
+    width: 33% !important;
+  }
+  #page-contact .section-header .h2:after {
+    background-size: 100%;
+    height: 100px;
+  }
+  #page-contact form {
+    margin: 0 20px;
   }
   .testimonial-section .card {
   display: none !important;
@@ -8240,5 +8286,14 @@ display: block !important;
   }
    .signup-form button { 
     min-width: 12em;
+   }
+   .custom-header > .container {
+    margin: 0 !important;
+   }
+   .left-side, .menu {
+    width: 100%;
+   }
+   .menu {
+    display:block;
    }
 }
