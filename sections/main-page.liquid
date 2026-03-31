@@ -1,7 +1,7 @@
 {%- assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient | default: section.settings.color_scheme.settings.background | md5 -%}
 
 <div class="section-spacing section-spacing--tight color-scheme color-scheme--{{ section.settings.color_scheme.id }} color-scheme--bg-{{ color_scheme_hash }}">
-  <div class="container container--{{ section.settings.page_width }}">
+  <div class="container">
     <div class="section-stack">
       {%- if section.settings.show_title -%}
         <div class="section-header justify-self-center text-center">

@@ -114,10 +114,20 @@
 
 <style>
 .product-section { padding: 60px 40px; }
-.container { display: flex; gap: 50px; }
+
+/* Top-align gallery with text column (avoid vertical centering when description is long) */
+.product-section .container {
+  display: flex;
+  gap: 50px;
+  align-items: flex-start;
+}
 
 /* IMAGES */
-.product-images { width: 50%; }
+.product-images {
+  width: 50%;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
 .main-image-wrapper { overflow: hidden; border-radius: 10px; }
 .main-image-wrapper img {
   width: 100%;
@@ -195,8 +205,13 @@
 
 /* MOBILE */
 @media (max-width: 768px) {
-  .container { flex-direction: column; }
-  .product-images, .product-info { width: 100%; }
+  .product-section .container {
+    flex-direction: column;
+  }
+  .product-images,
+  .product-info {
+    width: 100%;
+  }
 }
 </style>
 
@@ -244,3 +259,15 @@ function scrollToTop(){
   window.scrollTo({top:0, behavior:"smooth"});
 }
 </script>
+
+{% schema %}
+{
+  "name": "t:sections.main_product.name",
+  "tag": "section",
+  "class": "shopify-section--main-product",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": []
+}
+{% endschema %}

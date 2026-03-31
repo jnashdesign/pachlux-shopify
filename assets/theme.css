@@ -8155,7 +8155,7 @@ ul {
   max-width: 1200px;
   margin: 0 auto;
 }
-main > section:first-child a.link {
+#page-home > section:first-child a.link {
   background: #222;
   text-decoration: none;
   padding: 10px 40px;
@@ -8164,7 +8164,7 @@ main > section:first-child a.link {
   border-radius: 50px;
   font-weight: bold;
 }
-main > section:first-child {
+#page-home > section:first-child {
   background-image: url(https://cdn.shopify.com/s/files/1/0812/0690/3002/files/irresistibleCurvesHeader_wide.png?v=1774682344);
   background-position: bottom right;
   background-repeat: no-repeat;
@@ -8172,8 +8172,8 @@ main > section:first-child {
   min-height: 500px;
   padding: 100px 0;
 }
-main > section:first-child .prose h2,
-main > section:first-child .prose p {
+#page-home > section:first-child .prose h2,
+#page-home > section:first-child .prose p {
   color: #a23324;
 }
 .container .section-header {
@@ -8198,22 +8198,22 @@ margin: 0 auto;
   #main {
     max-width: 1000px;
   }
-  main > section:first-child {
+  #page-home > section:first-child {
     background-position: -600px 0;
   }
-  main > section:first-child .prose h2,
-  main > section:first-child .prose p {
+  #page-home > section:first-child .prose h2,
+  #page-home > section:first-child .prose p {
     color: #a23324;
   }
-  main > section:first-child .prose h2 {
+  #page-home > section:first-child .prose h2 {
     max-width: 300px;
   }
-  main > section:first-child .prose p {
+  #page-home > section:first-child .prose p {
     width: 100%;
   }
 }
 @media screen and (max-width: 768px) {
-  main > section:first-child {
+  #page-home > section:first-child {
     background-image: url(https://cdn.shopify.com/s/files/1/0812/0690/3002/files/irresistibleCurvesHeader_mobile.png?v=1774684277);
     background-position: bottom right;
     min-height: 600px;
@@ -8226,13 +8226,13 @@ margin: 0 auto;
   .testimonial-section .card.active {
 display: block !important;
 }
-  main > section:first-child .container {
+  #page-home > section:first-child .container {
     margin-top: -100px;
   }
-  main > section:first-child .prose h2 {
+  #page-home > section:first-child .prose h2 {
     max-width: none;
   }
-  main > section:first-child .multi-column {
+  #page-home > section:first-child .multi-column {
     display: block !important;
   }
   .signup-form { 

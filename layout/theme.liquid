@@ -106,7 +106,7 @@
     {%- endif -%}
 
     <main id="main" class="anchor">
-      {%- render 'page-top-anchor' -%}
+      {%- render 'page-top-anchor', wrapper: 'open' -%}
       {{ content_for_layout }}
 
       {%- comment -%}
@@ -117,6 +117,7 @@
       {%- if request.page_type != 'password' -%}
         {%- sections 'footer-group' -%}
       {%- endif -%}
+      {%- render 'page-top-anchor', wrapper: 'close' -%}
     </main>
   </body>
 </html>

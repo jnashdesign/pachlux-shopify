@@ -77,12 +77,13 @@
   %}
 
   <body class="{{ features_class }} color-scheme color-scheme--{{ settings.default_color_scheme.id }}"><main id="main" class="anchor">
-      {%- render 'page-top-anchor' -%}
+      {%- render 'page-top-anchor', wrapper: 'open' -%}
       {{ content_for_layout }}
 
       
       {%- if request.page_type != 'password' -%}
         {%- sections 'footer-group' -%}
       {%- endif -%}
+      {%- render 'page-top-anchor', wrapper: 'close' -%}
     </main></body>
 </html>
