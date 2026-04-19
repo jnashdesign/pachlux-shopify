@@ -482,6 +482,9 @@
       "view_products": "Voir les produits",
       "view_product": "Voir le produit"
     },
+    "main_collection": {
+      "select_collection_in_editor": "Choisissez une collection dans les réglages de cette section pour afficher la grille de produits ici."
+    },
     "quick_order_list": {
       "products": "Produits",
       "variants": "Variantes",

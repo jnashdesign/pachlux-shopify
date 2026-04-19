@@ -940,6 +940,36 @@
         }
       }
     },
+    "video_with_text_overlay": {
+      "name": "Vidéo avec texte superposé",
+      "video_size_recommendation": "Privilégiez un MP4 court et compressé (environ 1080p ou moins) et une boucle de 6 à 15 secondes pour un chargement plus rapide.",
+      "mobile_video_info": "Clip optionnel plus léger ou plus court pour mobile. Si vide, la vidéo principale est utilisée partout.",
+      "blocks": {
+        "subheading": {
+          "name": "Sous-titre"
+        },
+        "heading": {
+          "name": "Titre"
+        },
+        "paragraph": {
+          "name": "Paragraphe"
+        },
+        "liquid": {
+          "name": "Liquid"
+        },
+        "button": {
+          "name": "Bouton"
+        },
+        "link": {
+          "name": "Lien"
+        }
+      },
+      "presets": {
+        "video_with_text_overlay": {
+          "name": "Vidéo avec texte superposé"
+        }
+      }
+    },
     "images_with_text_scroll": {
       "name": "Images avec texte qui scrolle",
       "instructions": "Configurez le contenu en ajoutant des blocs. La section s'adapte automatiquement pour remplir exactement la hauteur de l'écran.",
@@ -1016,6 +1046,8 @@
     },
     "main_collection": {
       "name": "Page de collection",
+      "collection_setting": "Collection",
+      "collection_setting_info": "Lorsque cette section est sur l’accueil ou une page autre qu’une collection, choisissez la collection à afficher (par ex. « Tous les produits »). Sur une page collection, la collection de la page est toujours utilisée.",
       "quick_links_menu": "Liens rapides",
       "quick_links_menu_info": "Les menus déroulants ne sont pas affichés.",
       "blocks": {
@@ -1398,8 +1430,8 @@
       "background_position_mobile": "Position (mobile)",
       "background_size_mobile": "Taille (mobile)",
       "background_mobile_min_height": "Hauteur minimale (mobile)",
-      "background_mobile_padding_bottom_percent": "Espacement bas (mobile)",
-      "background_mobile_padding_bottom_percent_info": "Pourcentage de la largeur de la section ajouté en marge basse. Mettre 0 pour désactiver.",
+      "background_mobile_padding_top": "Marge supérieure (mobile)",
+      "background_mobile_padding_bottom": "Marge inférieure (mobile)",
       "stack_on_mobile": "Empiler les colonnes sur mobile",
       "columns_per_row": "Colonnes par ligne (desktop)",
       "overlap_image": "Superposer l'image avec le titre",

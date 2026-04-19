@@ -56,9 +56,8 @@
           background-size: {{ section.settings.background_size_mobile }};
           min-height: {{ section.settings.background_mobile_min_height }}px;
           padding-block: unset;
-          {%- if section.settings.background_mobile_padding_bottom_percent > 0 -%}
-            padding-bottom: {{ section.settings.background_mobile_padding_bottom_percent }}%;
-          {%- endif -%}
+          padding-top: {{ section.settings.background_mobile_padding_top }}px;
+          padding-bottom: {{ section.settings.background_mobile_padding_bottom }}px;
         }
       }
     {%- endif -%}
@@ -331,14 +330,24 @@
     },
     {
       "type": "range",
-      "id": "background_mobile_padding_bottom_percent",
+      "id": "background_mobile_padding_top",
       "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "label": "t:sections.multi_column.background_mobile_padding_bottom_percent",
-      "info": "t:sections.multi_column.background_mobile_padding_bottom_percent_info",
-      "default": 65,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.multi_column.background_mobile_padding_top",
+      "default": 0,
+      "visible_if": "{{ section.settings.background_image_mobile != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "background_mobile_padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.multi_column.background_mobile_padding_bottom",
+      "default": 0,
       "visible_if": "{{ section.settings.background_image_mobile != blank }}"
     },
     {

@@ -940,6 +940,36 @@
         }
       }
     },
+    "video_with_text_overlay": {
+      "name": "Video with text overlay",
+      "video_size_recommendation": "Prefer a short, compressed MP4 (about 1080p or smaller) and a 6–15 second loop for faster loading.",
+      "mobile_video_info": "Optional smaller or shorter clip for phones. If empty, the main video is used everywhere.",
+      "blocks": {
+        "subheading": {
+          "name": "Subheading"
+        },
+        "heading": {
+          "name": "Heading"
+        },
+        "paragraph": {
+          "name": "Paragraph"
+        },
+        "liquid": {
+          "name": "Liquid"
+        },
+        "button": {
+          "name": "Button"
+        },
+        "link": {
+          "name": "Link"
+        }
+      },
+      "presets": {
+        "video_with_text_overlay": {
+          "name": "Video with text overlay"
+        }
+      }
+    },
     "images_with_text_scroll": {
       "name": "Images with text scroll",
       "instructions": "Configure content by adding blocks. The section adapts automatically to fill exactly the screen height.",
@@ -1016,6 +1046,8 @@
     },
     "main_collection": {
       "name": "Collection page",
+      "collection_setting": "Collection",
+      "collection_setting_info": "When this section is used on the home page or another non-collection page, choose which collection to show (for example, your “All” catalog). On collection pages, the current page collection is always used.",
       "quick_links_menu": "Quick links menu",
       "quick_links_menu_info": "This menu won't show dropdown items.",
       "blocks": {
@@ -1398,8 +1430,8 @@
       "background_position_mobile": "Background position (mobile)",
       "background_size_mobile": "Background size (mobile)",
       "background_mobile_min_height": "Minimum section height (mobile)",
-      "background_mobile_padding_bottom_percent": "Mobile bottom spacing",
-      "background_mobile_padding_bottom_percent_info": "Percentage of the section width added as bottom padding (layout technique for tall hero areas). Set to 0 to disable.",
+      "background_mobile_padding_top": "Top padding (mobile)",
+      "background_mobile_padding_bottom": "Bottom padding (mobile)",
       "stack_on_mobile": "Stack columns on mobile",
       "columns_per_row": "Columns per row (desktop)",
       "overlap_image": "Overlap image with heading",

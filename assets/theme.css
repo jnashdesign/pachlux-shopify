@@ -7,6 +7,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+  font-family: 'Cinzel';
+  src: url('Cinzel-VariableFont_wght.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   tab-size: 4;
@@ -37,6 +45,11 @@ a {
 
 b, strong {
   font-weight: bolder;
+}
+
+h1, h2 {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
 }
 
 code, kbd, samp, pre {
@@ -199,6 +212,9 @@ video {
   display: none !important;
 }
 
+.signup-btn {
+  background-color: #e7b4b8 !important;
+}
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*) {
     animation-duration: 0s;
@@ -254,6 +270,20 @@ height-observer {
   padding-block-end: 1.25rem;
   padding-inline-end: 1.25rem;
 }
+.ai-product-grid__filters-ar0rzqxvctm0xn3rymaigenblock646bd1bzwmlky  {
+display: none !important;
+}
+
+#page-home>section:first-child .prose h2 {
+margin-top: 0;
+max-width: 350px;
+font-size: 2.75em;
+line-height: 1em;
+text-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+}
+#page-home>section:first-child .prose h2, #page-home>section:first-child .prose p {
+  color: #fff !important;
+}
 
 @media screen and (min-width: 1000px) {
   .accordion__toggle.text-lg {
@@ -271,6 +301,10 @@ height-observer {
 
 .accordion-group > * + * > .accordion {
   border-block-start-width: 0;
+}
+
+.color-scheme.color-scheme--scheme-1.color-scheme--bg-609ecfcfee2f667ac6c12366fc6ece56.section-spacing {
+padding-top: 0 !important;
 }
 
 .blog-post-card {
@@ -314,6 +348,17 @@ height-observer {
   display: none;
 }
 
+#shopify-section-template--21728930857178__multi_column_QfTYEp .multi-column--has-bg {
+  background-position: 100% 80%;
+  background-size: 200%;
+  background-color: pink;
+}
+@media screen and (max-width: 1000px) {
+  #shopify-section-template--21728930857178__multi_column_QfTYEp .multi-column--has-bg {
+    padding-top: 200px;
+    background-size: 150%;
+  }
+}
 @media screen and (min-width: 700px) {
   .blog-post-list {
     --blog-post-list-items-per-row: 2;
@@ -7995,11 +8040,17 @@ shopify-account::part(signed-out-avatar) {
 }
 
 .h1, :where(.prose h1) {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  letter-spacing: 2px;
   font-size: var(--text-h1);
   line-height: 1.5;
 }
 
 .h2, :where(.prose h2) {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  letter-spacing: 2px;
   font-size: var(--text-h2);
   line-height: 1.5;
 }
@@ -8232,6 +8283,14 @@ color: #fff !important;
 .sticky-bar {
   display:none !important;
 }
+h1, .h1, .h1 p, h1 a, h2, .h2, .h2 p, h2 a {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.shopify-section--rich-text .section-spacing {
+    padding: 40px;
+}
 @media screen and (max-width: 1200px) {
   #main {
     max-width: 1000px;
@@ -8241,13 +8300,19 @@ color: #fff !important;
   }
   #page-home > section:first-child .prose h2,
   #page-home > section:first-child .prose p {
-    color: #a23324;
+    color: #fff;
+    text-shadow: 2px 2px 2px rgba(0,0,0,0.2);
   }
   #page-home > section:first-child .prose h2 {
     max-width: 300px;
   }
   #page-home > section:first-child .prose p {
     width: 100%;
+  }
+}
+@media screen and (max-width: 1000px) and (min-width: 769px) {
+  #shopify-section-template--21728930857178__multi_column_QfTYEp .multi-column--has-bg {
+    background-position: 60% 0 !important;
   }
 }
 @media screen and (max-width: 768px) {
@@ -8272,9 +8337,11 @@ color: #fff !important;
   .testimonial-section .card.active {
 display: block !important;
 }
-  #page-home > section:first-child .container {
-    margin-top: -100px;
-  }
+#page-home>section:first-child .container {
+  background: rgba(0,0,0,0.25);
+  padding: 60px 20px 20px;
+  margin: -100px 20px 20px;
+}
   #page-home > section:first-child .prose h2 {
     max-width: none;
   }

@@ -16,10 +16,12 @@
   * update_on_change: if set to true the results will reload as soon as an option is changed
   * quick_links_menu: an optional menu that will show fixed links
   * context: an optional context to generate unique ID if facets are outputted several times
+  * form_action: optional form action URL (defaults to request.path). Use the collection URL when faceting a collection on a non-collection page.
 {%- endcomment -%}
 
 {%- assign color_label_list = 'general.label.color' | t | replace: ', ', ',' | downcase | split: ',' -%}
 {%- capture id_prefix -%}facets-{{ context }}{%- endcapture -%}
+{%- assign facets_form_action = form_action | default: request.path -%}
 
 <facets-form
   {% if update_on_change %}
@@ -27,7 +29,7 @@
   {% endif %}
   section-id="{{ section.id }}"
 >
-  <form method="GET" action="{{ request.path }}" class="facets">
+  <form method="GET" action="{{ facets_form_action }}" class="facets">
     {%- comment -%}We always reset to the first page so that when criteria change, the page is restored to the first one{%- endcomment -%}
     <input type="hidden" name="page" value="">
 

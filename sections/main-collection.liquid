@@ -1,4 +1,26 @@
 {%- liquid
+  unless request.page_type == 'collection'
+    if section.settings.collection != blank
+      assign collection = section.settings.collection
+    endif
+  endunless
+-%}
+
+{%- if collection == blank -%}
+  {%- if request.design_mode -%}
+    <div class="color-scheme color-scheme--{{ section.settings.color_scheme.id }}">
+      <div class="container">
+        <div class="empty-state">
+          <div class="prose">
+            <p>{{ 'sections.main_collection.select_collection_in_editor' | t }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+{%- else -%}
+
+{%- liquid
   assign active_values_count = 0
 
   for filter in collection.filters
@@ -148,6 +170,7 @@
                   <facets-sort-popover
                     id="sort-by-popover"
                     section-id="{{ section.id }}"
+                    facet-url-base="{{ collection.url }}"
                     class="popover popover--bottom-end color-scheme color-scheme--dialog"
                     close-on-listbox-select
                   >
@@ -246,7 +269,8 @@
                   open_filters_by_default: section.settings.open_filters_by_default,
                   update_on_change: false,
                   quick_links_menu: section.settings.quick_links_menu,
-                  context: 'drawer'
+                  context: 'drawer',
+                  form_action: collection.url
                 -%}
 
                 <div slot="footer">
@@ -266,7 +290,8 @@
                     open_filters_by_default: section.settings.open_filters_by_default,
                     update_on_change: true,
                     quick_links_menu: section.settings.quick_links_menu,
-                    context: 'sidebar'
+                    context: 'sidebar',
+                    form_action: collection.url
                   -%}
                 </safe-sticky>
               {%- endif -%}
@@ -317,6 +342,8 @@
   </div>
 </div>
 
+{%- endif -%}
+
 {% schema %}
 {
   "name": "t:sections.main_collection.name",
@@ -328,6 +355,12 @@
       "id": "color_scheme",
       "label": "t:global.colors.scheme",
       "default": "scheme-1"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.main_collection.collection_setting",
+      "info": "t:sections.main_collection.collection_setting_info"
     },
     {
       "type": "checkbox",

@@ -57,10 +57,10 @@
   {%- endfor -%}
 
   {%- if active_values_count > 1 -%}
-    {%- if request.page_type == 'collection' -%}
-      {%- assign default_url = collection.url -%}
+    {%- if request.page_type == 'search' -%}
+      {%- capture default_url -%}{{ routes.search_url }}?q={{ search.terms | url_encode }}&type=product&sort_by={{ search.sort_by }}{%- endcapture -%}
     {%- else -%}
-      {%- capture default_url -%}{{ routes.search_url }}?q={{ search.terms }}&type=product&sort_by={{ search.sort_by }}{%- endcapture -%}
+      {%- assign default_url = results.url -%}
     {%- endif -%}
 
     <facet-link>

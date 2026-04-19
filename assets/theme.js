@@ -2316,7 +2316,8 @@ var FacetsSortPopover = class extends Popover {
 };
 _FacetsSortPopover_instances = new WeakSet();
 onSortChange_fn = function(event) {
-  const url = new URL(window.location.href);
+  const baseAttr = this.getAttribute("facet-url-base");
+  const url = baseAttr ? new URL(baseAttr, window.location.origin) : new URL(window.location.href);
   url.searchParams.set("sort_by", event.detail.value);
   url.searchParams.delete("page");
   url.searchParams.set("section_id", this.getAttribute("section-id"));

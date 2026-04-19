@@ -1,0 +1,839 @@
+{% doc %}
+  @prompt
+    I'd like a product grid of all the products with filters, I'd like the font for the product cards to be Cinzel
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .pachLux-product-grid-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: {{ block.settings.section_padding }}px 0;
+  }
+
+  .pachLux-product-grid__container-{{ ai_gen_id }} {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .pachLux-product-grid__header-{{ ai_gen_id }} {
+    margin-bottom: 30px;
+  }
+
+  .pachLux-product-grid__title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    margin: 0 0 10px;
+    color: {{ block.settings.text_color }};
+  }
+
+  .pachLux-product-grid__description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_size }}px;
+    color: {{ block.settings.text_color }};
+    margin: 0;
+  }
+
+  .pachLux-product-grid__filters-{{ ai_gen_id }} {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .pachLux-product-grid__filter-group-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pachLux-product-grid__filter-label-{{ ai_gen_id }} {
+    font-size: 12px;
+    font-weight: 600;
+    color: {{ block.settings.text_color }};
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .pachLux-product-grid__filter-select-{{ ai_gen_id }} {
+    padding: 10px 35px 10px 15px;
+    border: 1px solid {{ block.settings.filter_border_color }};
+    border-radius: {{ block.settings.filter_border_radius }}px;
+    background-color: {{ block.settings.filter_background }};
+    color: {{ block.settings.text_color }};
+    font-size: 14px;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231c1c1c' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    min-width: 150px;
+  }
+
+  .pachLux-product-grid__filter-select-{{ ai_gen_id }}:focus {
+    outline: 2px solid {{ block.settings.text_color }};
+    outline-offset: 2px;
+  }
+
+  .pachLux-product-grid__sort-{{ ai_gen_id }} {
+    margin-left: auto;
+  }
+
+  .pachLux-product-grid__results-count-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: {{ block.settings.text_color }};
+    margin-bottom: 20px;
+  }
+
+  .pachLux-product-grid__grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.columns_desktop }}, 1fr);
+    gap: {{ block.settings.grid_gap }}px;
+    margin-bottom: 30px;
+  }
+
+  .pachLux-product-grid__item-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease;
+  }
+
+  .pachLux-product-grid__item-{{ ai_gen_id }}:hover {
+    transform: translateY(-5px);
+  }
+
+  .pachLux-product-grid__image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    overflow: hidden;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    background-color: #f4f4f4;
+    margin-bottom: 12px;
+  }
+
+  .pachLux-product-grid__media-stack-{{ ai_gen_id }} {
+    position: absolute;
+    inset: 0;
+  }
+
+  .pachLux-product-grid__image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.35s ease;
+  }
+
+  .pachLux-product-grid__img--rollover-{{ ai_gen_id }} {
+    opacity: 0;
+  }
+
+  @media (hover: hover) {
+    .pachLux-product-grid__item-{{ ai_gen_id }}:hover .pachLux-product-grid__img--rollover-{{ ai_gen_id }} {
+      opacity: 1;
+    }
+
+    .pachLux-product-grid__item-{{ ai_gen_id }}:hover .pachLux-product-grid__img--primary-{{ ai_gen_id }} {
+      opacity: 0;
+    }
+  }
+
+  .pachLux-product-grid__image-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pachLux-product-grid__image-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .pachLux-product-grid__badge-{{ ai_gen_id }} {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    background-color: {{ block.settings.badge_background }};
+    color: {{ block.settings.badge_text_color }};
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: {{ block.settings.badge_border_radius }}px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .pachLux-product-grid__info-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .pachLux-product-grid__vendor-{{ ai_gen_id }} {
+    font-size: 12px;
+    color: {{ block.settings.text_color }};
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: {{ block.settings.product_card_font.family }}, {{ block.settings.product_card_font.fallback_families }};
+    font-weight: {{ block.settings.product_card_font.weight }};
+    font-style: {{ block.settings.product_card_font.style }};
+  }
+
+  .pachLux-product-grid__title-item-{{ ai_gen_id }} {
+    font-size: {{ block.settings.product_title_size }}px;
+    color: {{ block.settings.text_color }};
+    margin: 0;
+    font-weight: 600;
+    font-family: {{ block.settings.product_card_font.family }}, {{ block.settings.product_card_font.fallback_families }};
+    font-style: {{ block.settings.product_card_font.style }};
+  }
+
+  .pachLux-product-grid__price-{{ ai_gen_id }} {
+    font-size: {{ block.settings.product_price_size }}px;
+    color: {{ block.settings.text_color }};
+    font-weight: 600;
+    font-family: {{ block.settings.product_card_font.family }}, {{ block.settings.product_card_font.fallback_families }};
+    font-style: {{ block.settings.product_card_font.style }};
+  }
+
+  .pachLux-product-grid__price--sale-{{ ai_gen_id }} {
+    color: {{ block.settings.sale_color }};
+  }
+
+  .pachLux-product-grid__price--compare-{{ ai_gen_id }} {
+    text-decoration: line-through;
+    opacity: 0.6;
+    margin-left: 8px;
+    font-size: 0.9em;
+  }
+
+  .pachLux-product-grid__empty-{{ ai_gen_id }} {
+    text-align: center;
+    padding: 60px 20px;
+    color: {{ block.settings.text_color }};
+    opacity: 0.6;
+  }
+
+  .pachLux-product-grid__hidden-{{ ai_gen_id }} {
+    display: none;
+  }
+
+  @media screen and (max-width: 989px) {
+    .pachLux-product-grid__grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.columns_tablet }}, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .pachLux-product-grid__grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.columns_mobile }}, 1fr);
+    }
+
+    .pachLux-product-grid__filters-{{ ai_gen_id }} {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .pachLux-product-grid__sort-{{ ai_gen_id }} {
+      margin-left: 0;
+    }
+
+    .pachLux-product-grid__filter-select-{{ ai_gen_id }} {
+      width: 100%;
+    }
+  }
+{% endstyle %}
+
+<product-grid-{{ ai_gen_id }} class="pachLux-product-grid-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="pachLux-product-grid__container-{{ ai_gen_id }}">
+    {% if block.settings.title != blank or block.settings.description != blank %}
+      <div class="pachLux-product-grid__header-{{ ai_gen_id }}">
+        {% if block.settings.title != blank %}
+          <h2 class="pachLux-product-grid__title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+        {% endif %}
+        {% if block.settings.description != blank %}
+          <div class="pachLux-product-grid__description-{{ ai_gen_id }}">{{ block.settings.description }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="pachLux-product-grid__filters-{{ ai_gen_id }}">
+      {% if block.settings.show_collection_filter %}
+        <div class="pachLux-product-grid__filter-group-{{ ai_gen_id }}">
+          <label class="pachLux-product-grid__filter-label-{{ ai_gen_id }}" for="collection-filter-{{ ai_gen_id }}">Collection</label>
+          <select id="collection-filter-{{ ai_gen_id }}" class="pachLux-product-grid__filter-select-{{ ai_gen_id }}" data-filter="collection">
+            <option value="">All collections</option>
+            {% for collection in collections %}
+              <option value="{{ collection.handle }}">{{ collection.title }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+
+      {% if block.settings.show_type_filter %}
+        <div class="pachLux-product-grid__filter-group-{{ ai_gen_id }}">
+          <label class="pachLux-product-grid__filter-label-{{ ai_gen_id }}" for="type-filter-{{ ai_gen_id }}">Type</label>
+          <select id="type-filter-{{ ai_gen_id }}" class="pachLux-product-grid__filter-select-{{ ai_gen_id }}" data-filter="type">
+            <option value="">All types</option>
+          </select>
+        </div>
+      {% endif %}
+
+      {% if block.settings.show_vendor_filter %}
+        <div class="pachLux-product-grid__filter-group-{{ ai_gen_id }}">
+          <label class="pachLux-product-grid__filter-label-{{ ai_gen_id }}" for="vendor-filter-{{ ai_gen_id }}">Vendor</label>
+          <select id="vendor-filter-{{ ai_gen_id }}" class="pachLux-product-grid__filter-select-{{ ai_gen_id }}" data-filter="vendor">
+            <option value="">All vendors</option>
+          </select>
+        </div>
+      {% endif %}
+
+      <div class="pachLux-product-grid__filter-group-{{ ai_gen_id }} pachLux-product-grid__sort-{{ ai_gen_id }}">
+        <label class="pachLux-product-grid__filter-label-{{ ai_gen_id }}" for="sort-filter-{{ ai_gen_id }}">Sort by</label>
+        <select id="sort-filter-{{ ai_gen_id }}" class="pachLux-product-grid__filter-select-{{ ai_gen_id }}" data-filter="sort">
+          <option value="title-asc">Name: A-Z</option>
+          <option value="title-desc">Name: Z-A</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="created-desc">Newest</option>
+          <option value="created-asc">Oldest</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="pachLux-product-grid__results-count-{{ ai_gen_id }}">
+      Showing <span data-count>0</span> products
+    </div>
+
+    <div class="pachLux-product-grid__grid-{{ ai_gen_id }}" data-product-grid>
+      {% for product in collections.all.products limit: block.settings.products_limit %}
+        <a 
+          href="{{ product.url }}" 
+          class="pachLux-product-grid__item-{{ ai_gen_id }}"
+          data-product-item
+          data-product-type="{{ product.type }}"
+          data-product-vendor="{{ product.vendor }}"
+          data-product-price="{{ product.price }}"
+          data-product-title="{{ product.title }}"
+          data-product-created="{{ product.created_at | date: '%s' }}"
+        >
+          <div class="pachLux-product-grid__image-wrapper-{{ ai_gen_id }}">
+            {% liquid
+              assign rollover_media = ''
+              if block.settings.enable_rollover_image
+                assign rollover_src = block.settings.rollover_source
+                if rollover_src == 'metafield_only' or rollover_src == 'metafield_then_second'
+                  if product.metafields.custom.rollover_image != blank
+                    assign rollover_media = product.metafields.custom.rollover_image.value
+                  endif
+                endif
+                if rollover_media == blank
+                  if rollover_src == 'second_image_only' or rollover_src == 'metafield_then_second'
+                    if product.images.size > 1
+                      assign rollover_media = product.images[1]
+                    endif
+                  endif
+                endif
+              endif
+            %}
+            {% if product.featured_image %}
+              <div class="pachLux-product-grid__media-stack-{{ ai_gen_id }}">
+                <img
+                  src="{{ product.featured_image | image_url: width: 600 }}"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  class="pachLux-product-grid__image-{{ ai_gen_id }}{% if rollover_media != blank %} pachLux-product-grid__img--primary-{{ ai_gen_id }}{% endif %}"
+                  loading="lazy"
+                  width="600"
+                  height="600"
+                >
+                {% if rollover_media != blank %}
+                  <img
+                    src="{{ rollover_media | image_url: width: 600 }}"
+                    alt="{{ rollover_media.alt | default: product.featured_image.alt | escape }}"
+                    class="pachLux-product-grid__image-{{ ai_gen_id }} pachLux-product-grid__img--rollover-{{ ai_gen_id }}"
+                    loading="lazy"
+                    width="600"
+                    height="600"
+                  >
+                {% endif %}
+              </div>
+            {% else %}
+              <div class="pachLux-product-grid__image-placeholder-{{ ai_gen_id }}">
+                {{ 'product-1' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+
+            {% if product.available == false %}
+              <span class="pachLux-product-grid__badge-{{ ai_gen_id }}">Sold out</span>
+            {% elsif product.compare_at_price > product.price %}
+              <span class="pachLux-product-grid__badge-{{ ai_gen_id }}">Sale</span>
+            {% endif %}
+          </div>
+
+          <div class="pachLux-product-grid__info-{{ ai_gen_id }}">
+            {% if block.settings.show_vendor and product.vendor != blank %}
+              <div class="pachLux-product-grid__vendor-{{ ai_gen_id }}">{{ product.vendor }}</div>
+            {% endif %}
+
+            <h3 class="pachLux-product-grid__title-item-{{ ai_gen_id }}">{{ product.title }}</h3>
+
+            <div class="pachLux-product-grid__price-{{ ai_gen_id }} {% if product.compare_at_price > product.price %}pachLux-product-grid__price--sale-{{ ai_gen_id }}{% endif %}">
+              {{ product.price | money }}
+              {% if product.compare_at_price > product.price %}
+                <span class="pachLux-product-grid__price--compare-{{ ai_gen_id }}">{{ product.compare_at_price | money }}</span>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+
+    <div class="pachLux-product-grid__empty-{{ ai_gen_id }} pachLux-product-grid__hidden-{{ ai_gen_id }}" data-empty-state>
+      No products found matching your filters.
+    </div>
+  </div>
+</product-grid-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductGrid{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.filters = {
+          collection: '',
+          type: '',
+          vendor: '',
+          sort: 'title-asc'
+        };
+      }
+
+      connectedCallback() {
+        this.productGrid = this.querySelector('[data-product-grid]');
+        this.productItems = Array.from(this.querySelectorAll('[data-product-item]'));
+        this.emptyState = this.querySelector('[data-empty-state]');
+        this.countElement = this.querySelector('[data-count]');
+        this.filterSelects = this.querySelectorAll('[data-filter]');
+
+        this.populateFilters();
+        this.setupEventListeners();
+        this.updateDisplay();
+      }
+
+      populateFilters() {
+        const types = new Set();
+        const vendors = new Set();
+
+        this.productItems.forEach(item => {
+          const type = item.dataset.productType;
+          const vendor = item.dataset.productVendor;
+          
+          if (type) types.add(type);
+          if (vendor) vendors.add(vendor);
+        });
+
+        const typeSelect = this.querySelector('[data-filter="type"]');
+        if (typeSelect) {
+          Array.from(types).sort().forEach(type => {
+            const option = document.createElement('option');
+            option.value = type;
+            option.textContent = type;
+            typeSelect.appendChild(option);
+          });
+        }
+
+        const vendorSelect = this.querySelector('[data-filter="vendor"]');
+        if (vendorSelect) {
+          Array.from(vendors).sort().forEach(vendor => {
+            const option = document.createElement('option');
+            option.value = vendor;
+            option.textContent = vendor;
+            vendorSelect.appendChild(option);
+          });
+        }
+      }
+
+      setupEventListeners() {
+        this.filterSelects.forEach(select => {
+          select.addEventListener('change', (e) => {
+            const filterType = e.target.dataset.filter;
+            this.filters[filterType] = e.target.value;
+            this.updateDisplay();
+          });
+        });
+      }
+
+      updateDisplay() {
+        let visibleItems = this.filterProducts();
+        visibleItems = this.sortProducts(visibleItems);
+
+        this.productItems.forEach(item => {
+          if (visibleItems.includes(item)) {
+            item.classList.remove('pachLux-product-grid__hidden-{{ ai_gen_id }}');
+          } else {
+            item.classList.add('pachLux-product-grid__hidden-{{ ai_gen_id }}');
+          }
+        });
+
+        if (this.countElement) {
+          this.countElement.textContent = visibleItems.length;
+        }
+
+        if (this.emptyState) {
+          if (visibleItems.length === 0) {
+            this.emptyState.classList.remove('pachLux-product-grid__hidden-{{ ai_gen_id }}');
+          } else {
+            this.emptyState.classList.add('pachLux-product-grid__hidden-{{ ai_gen_id }}');
+          }
+        }
+      }
+
+      filterProducts() {
+        return this.productItems.filter(item => {
+          if (this.filters.type && item.dataset.productType !== this.filters.type) {
+            return false;
+          }
+          if (this.filters.vendor && item.dataset.productVendor !== this.filters.vendor) {
+            return false;
+          }
+          return true;
+        });
+      }
+
+      sortProducts(items) {
+        const sorted = [...items];
+        const [sortBy, direction] = this.filters.sort.split('-');
+
+        sorted.sort((a, b) => {
+          let aValue, bValue;
+
+          if (sortBy === 'price') {
+            aValue = parseFloat(a.dataset.productPrice);
+            bValue = parseFloat(b.dataset.productPrice);
+          } else if (sortBy === 'title') {
+            aValue = a.dataset.productTitle.toLowerCase();
+            bValue = b.dataset.productTitle.toLowerCase();
+          } else if (sortBy === 'created') {
+            aValue = parseInt(a.dataset.productCreated);
+            bValue = parseInt(b.dataset.productCreated);
+          }
+
+          if (direction === 'asc') {
+            return aValue > bValue ? 1 : -1;
+          } else {
+            return aValue < bValue ? 1 : -1;
+          }
+        });
+
+        sorted.forEach((item, index) => {
+          item.style.order = index;
+        });
+
+        return sorted;
+      }
+    }
+
+    customElements.define('product-grid-{{ ai_gen_id }}', ProductGrid{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product grid with filters",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "All products"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "min": 4,
+      "max": 50,
+      "step": 2,
+      "label": "Maximum products",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Filters"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_filter",
+      "label": "Show collection filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_type_filter",
+      "label": "Show type filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor_filter",
+      "label": "Show vendor filter",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Columns on tablet",
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Grid gap",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Section padding",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Product card"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "font_picker",
+      "id": "product_card_font",
+      "label": "Font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "product_title_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "product_price_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Price size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Image border radius",
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_rollover_image",
+      "label": "Show rollover image on hover",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "rollover_source",
+      "label": "Rollover image source",
+      "options": [
+        {
+          "value": "metafield_then_second",
+          "label": "Metafield first, then 2nd gallery image"
+        },
+        {
+          "value": "metafield_only",
+          "label": "Product metafield only"
+        },
+        {
+          "value": "second_image_only",
+          "label": "2nd gallery image only"
+        }
+      ],
+      "default": "metafield_then_second",
+      "info": "To upload a custom hover image per product, add a product metafield: namespace and key custom.rollover_image, type File (image). Settings → Custom data → Products → Add definition. Products with two or more images can use the 2nd image when the metafield is empty (if that option is enabled above)."
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Title size",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Description size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "color",
+      "id": "sale_color",
+      "label": "Sale price",
+      "default": "#e32c2b"
+    },
+    {
+      "type": "color",
+      "id": "filter_background",
+      "label": "Filter background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "filter_border_color",
+      "label": "Filter border",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "badge_background",
+      "label": "Badge background",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "filter_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Filter border radius",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "badge_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Badge border radius",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product grid with filters"
+    }
+  ]
+}
+{% endschema %}

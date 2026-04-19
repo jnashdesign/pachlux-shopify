@@ -1,0 +1,491 @@
+{%- if section.settings.video != blank or section.blocks.size > 0 -%}
+  {%- comment -%}
+    Fixed 10% black scrim for text legibility (--content-over-media-overlay).
+    Background video: muted autoplay loop, preload metadata, optional lighter mobile file.
+  {%- endcomment -%}
+
+  <style>
+    #shopify-section-{{ section.id }} {
+      --content-over-media-overlay: 0 0 0 / 0.1;
+      --content-over-media-content-max-width: var(--container-{{ section.settings.content_width }}-max-width);
+    }
+  </style>
+
+  <div
+    class="{% unless section.settings.remove_vertical_spacing %}section-spacing{% endunless %} color-scheme color-scheme--{{ section.settings.color_scheme.id }} color-scheme--with-image-overlay"
+    {% if section.settings.allow_transparent_header %}
+      allow-transparent-header
+    {% endif %}
+  >
+    <video-with-text-overlay
+      class="content-over-media content-over-media--{{ section.settings.media_size }}"
+      reveal-on-scroll="{{ section.settings.reveal_on_scroll }}"
+    >
+      {%- if section.settings.video != blank -%}
+        {%- if section.settings.mobile_video != blank -%}
+          <video-media
+            autoplay
+            type="video"
+            class="object-cover sm:hidden"
+          >
+            {{-
+              section.settings.mobile_video
+              | video_tag:
+                class: 'object-cover sm:hidden',
+                playsinline: true,
+                muted: true,
+                loop: true,
+                controls: false,
+                preload: 'metadata',
+                image_size: '600x'
+            -}}
+          </video-media>
+        {%- endif -%}
+
+        <video-media
+          autoplay
+          type="video"
+          {% if section.settings.mobile_video != blank %}
+            class="object-cover hidden sm:block"
+          {% else %}
+            class="object-cover"
+          {% endif %}
+        >
+          {{-
+            section.settings.video
+            | video_tag:
+              playsinline: true,
+              muted: true,
+              loop: true,
+              controls: false,
+              preload: 'metadata',
+              image_size: '800x'
+          -}}
+        </video-media>
+      {%- else -%}
+        {{- 'lifestyle-1' | placeholder_svg_tag: 'placeholder' | replace: '<svg', '<svg preserveAspectRatio="xMinYMin slice"' -}}
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="content {{ section.settings.mobile_text_position }} {{ section.settings.desktop_text_position }}">
+          <div class="prose">
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                {%- when 'subheading' -%}
+                  {%- if block.settings.text != blank -%}
+                    <p class="h6" {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
+                  {%- endif -%}
+
+                {%- when 'heading' -%}
+                  {%- if block.settings.text != blank -%}
+                    <p class="{{ block.settings.heading_tag }}" {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
+                  {%- endif -%}
+
+                {%- when 'richtext' -%}
+                  {%- if block.settings.content != blank -%}
+                    <div {{ block.shopify_attributes }}>
+                      {{- block.settings.content -}}
+                    </div>
+                  {%- endif -%}
+
+                {%- when 'liquid' -%}
+                  {%- if block.settings.liquid != blank -%}
+                    <div {{ block.shopify_attributes }}>
+                      {{- block.settings.liquid -}}
+                    </div>
+                  {%- endif -%}
+
+                {%- when 'button' -%}
+                  {%- if block.settings.text != blank -%}
+                    {%- render 'button',
+                      content: block.settings.text,
+                      href: block.settings.url,
+                      style: block.settings.style,
+                      background: block.settings.background,
+                      text_color: block.settings.text_color,
+                      block: block
+                    -%}
+                  {%- endif -%}
+
+                {%- when 'link' -%}
+                  {%- if block.settings.text != blank -%}
+                    <div {{ block.shopify_attributes }}>
+                      <a href="{{ block.settings.url }}">{{ block.settings.text }}</a>
+                    </div>
+                  {%- endif -%}
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </video-with-text-overlay>
+  </div>
+
+  <script type="module" src="{{ 'video-with-text-overlay.js' | asset_url }}"></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.video_with_text_overlay.name",
+  "class": "shopify-section--video-with-text-overlay",
+  "tag": "section",
+  "max_blocks": 6,
+  "disabled_on": {
+    "groups": ["header", "custom.overlay"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:global.colors.scheme",
+      "default": "scheme-4"
+    },
+    {
+      "type": "select",
+      "id": "media_size",
+      "label": "t:global.image.size",
+      "options": [
+        {
+          "value": "auto",
+          "label": "t:global.sizes.original_image_ratio"
+        },
+        {
+          "value": "xs",
+          "label": "t:global.sizes.x_small"
+        },
+        {
+          "value": "sm",
+          "label": "t:global.sizes.small"
+        },
+        {
+          "value": "md",
+          "label": "t:global.sizes.medium"
+        },
+        {
+          "value": "lg",
+          "label": "t:global.sizes.large"
+        },
+        {
+          "value": "fill",
+          "label": "t:global.sizes.fit_screen"
+        }
+      ],
+      "info": "t:global.image.ratio_avoid_cropping_info",
+      "default": "md"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "t:global.video.video",
+      "info": "t:sections.video_with_text_overlay.video_size_recommendation"
+    },
+    {
+      "type": "video",
+      "id": "mobile_video",
+      "label": "t:global.video.mobile_video",
+      "info": "t:sections.video_with_text_overlay.mobile_video_info"
+    },
+    {
+      "type": "checkbox",
+      "id": "allow_transparent_header",
+      "label": "t:global.section.allow_transparent_header",
+      "info": "t:global.section.allow_transparent_header_info",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "reveal_on_scroll",
+      "label": "t:global.animation.reveal_image_on_scroll",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_vertical_spacing",
+      "label": "t:global.spacing.remove_vertical_spacing",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "t:global.sizes.content_width",
+      "options": [
+        {
+          "value": "xxs",
+          "label": "t:global.sizes.xx_small"
+        },
+        {
+          "value": "xs",
+          "label": "t:global.sizes.x_small"
+        },
+        {
+          "value": "sm",
+          "label": "t:global.sizes.small"
+        },
+        {
+          "value": "md",
+          "label": "t:global.sizes.medium"
+        },
+        {
+          "value": "lg",
+          "label": "t:global.sizes.large"
+        },
+        {
+          "value": "xl",
+          "label": "t:global.sizes.x_large"
+        }
+      ],
+      "default": "md"
+    },
+    {
+      "type": "select",
+      "id": "mobile_text_position",
+      "label": "t:global.position.mobile_content_position",
+      "options": [
+        {
+          "value": "place-self-start text-start",
+          "label": "t:global.position.top_left"
+        },
+        {
+          "value": "place-self-start-center text-center",
+          "label": "t:global.position.top_center"
+        },
+        {
+          "value": "place-self-start-end text-end",
+          "label": "t:global.position.top_right"
+        },
+        {
+          "value": "place-self-center-start text-start",
+          "label": "t:global.position.middle_left"
+        },
+        {
+          "value": "place-self-center text-center",
+          "label": "t:global.position.middle_center"
+        },
+        {
+          "value": "place-self-center-end text-end",
+          "label": "t:global.position.middle_right"
+        },
+        {
+          "value": "place-self-end-start text-start",
+          "label": "t:global.position.bottom_left"
+        },
+        {
+          "value": "place-self-end-center text-center",
+          "label": "t:global.position.bottom_center"
+        },
+        {
+          "value": "place-self-end text-end",
+          "label": "t:global.position.bottom_right"
+        }
+      ],
+      "default": "place-self-center text-center"
+    },
+    {
+      "type": "select",
+      "id": "desktop_text_position",
+      "label": "t:global.position.desktop_content_position",
+      "options": [
+        {
+          "value": "sm:place-self-start sm:text-start",
+          "label": "t:global.position.top_left"
+        },
+        {
+          "value": "sm:place-self-start-center sm:text-center",
+          "label": "t:global.position.top_center"
+        },
+        {
+          "value": "sm:place-self-start-end sm:text-end",
+          "label": "t:global.position.top_right"
+        },
+        {
+          "value": "sm:place-self-center-start sm:text-start",
+          "label": "t:global.position.middle_left"
+        },
+        {
+          "value": "sm:place-self-center sm:text-center",
+          "label": "t:global.position.middle_center"
+        },
+        {
+          "value": "sm:place-self-center-end sm:text-end",
+          "label": "t:global.position.middle_right"
+        },
+        {
+          "value": "sm:place-self-end-start sm:text-start",
+          "label": "t:global.position.bottom_left"
+        },
+        {
+          "value": "sm:place-self-end-center sm:text-center",
+          "label": "t:global.position.bottom_center"
+        },
+        {
+          "value": "sm:place-self-end sm:text-end",
+          "label": "t:global.position.bottom_right"
+        }
+      ],
+      "default": "sm:place-self-center sm:text-center"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "subheading",
+      "name": "t:sections.video_with_text_overlay.blocks.subheading.name",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "t:global.text.text",
+          "default": "Subheading"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "t:sections.video_with_text_overlay.blocks.heading.name",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "t:global.text.text",
+          "default": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "heading_tag",
+          "label": "t:global.text.style",
+          "options": [
+            {
+              "value": "h1",
+              "label": "H1"
+            },
+            {
+              "value": "h2",
+              "label": "H2"
+            },
+            {
+              "value": "h3",
+              "label": "H3"
+            },
+            {
+              "value": "h4",
+              "label": "H4"
+            },
+            {
+              "value": "h5",
+              "label": "H5"
+            },
+            {
+              "value": "h6",
+              "label": "H6"
+            }
+          ],
+          "default": "h4"
+        }
+      ]
+    },
+    {
+      "type": "richtext",
+      "name": "t:sections.video_with_text_overlay.blocks.paragraph.name",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:global.text.content",
+          "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+        }
+      ]
+    },
+    {
+      "type": "liquid",
+      "name": "t:sections.video_with_text_overlay.blocks.liquid.name",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "liquid",
+          "label": "t:global.code.liquid",
+          "default": "<p>Use this text to output some custom Liquid code to include widget or dynamic code.</p>"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "t:sections.video_with_text_overlay.blocks.button.name",
+      "settings": [
+        {
+          "type": "select",
+          "id": "style",
+          "label": "t:global.text.style",
+          "options": [
+            {
+              "value": "outline",
+              "label": "t:global.text.button_style_options.outline"
+            },
+            {
+              "value": "solid",
+              "label": "t:global.text.button_style_options.solid"
+            }
+          ],
+          "default": "solid"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:global.text.text",
+          "default": "Button text"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "t:global.text.link"
+        },
+        {
+          "type": "color",
+          "id": "background",
+          "label": "t:global.colors.background"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "t:global.colors.text"
+        }
+      ]
+    },
+    {
+      "type": "link",
+      "name": "t:sections.video_with_text_overlay.blocks.link.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:global.text.text",
+          "default": "Link text"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "t:global.text.link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.video_with_text_overlay.presets.video_with_text_overlay.name",
+      "category": "t:global.categories.banners",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Video with text overlay"
+          }
+        },
+        {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>Add your own custom content to give more information about your store, availability details...</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
